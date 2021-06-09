@@ -99,7 +99,31 @@ chofer2TieneMenosViajes :: Chofer -> Chofer -> Bool
 chofer2TieneMenosViajes chofer2 = ( > length (viajes chofer2)) . length . viajes 
 
 --Punto 6c
---efectuar el viaje: esto debe incorporar el viaje a la lista de viajes del chofer. 
--- ¿Cómo logra representar este cambio de estado?
+efectuarViaje :: Viaje -> Chofer -> Chofer
+efectuarViaje viaje chofer = chofer { viajes = viajes chofer ++ [viaje]}
 
+--Punto 7a)
 
+nitoInfy :: Chofer
+nitoInfy = Chofer "Nito Infy" 70000 (repetirViaje viajeDeNito) (viajeSegunNombreCliente 3)
+
+viajeDeNito :: Viaje
+viajeDeNito = Viaje (11,03,2017) lucas 50
+
+repetirViaje :: Viaje -> [Viaje]  --LISTA INFINITA CON RECURSIVIDAD
+repetirViaje viaje = viaje : repetirViaje viaje
+
+--Punto 7b)
+{- ¿Puede calcular la liquidación de Nito? Justifique.
+No, porque para poder calcular la liquidacion de Nito necesito conocer el costo de todos los viajes que realizo. 
+Como Nito tiene una lista infinita de viajes, Haskell se va a colgar y no va a poder obtener la liquidacion porque no 
+llega a conocer todos los viajes que realizo Nito
+-}
+
+--Punto 7c)
+{-
+¿Y saber si Nito puede tomar un viaje de Lucas de $ 500 el 2/5/2017? Justifique. 
+Si. 
+-}
+
+--Punto 8
