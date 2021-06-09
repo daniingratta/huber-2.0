@@ -10,18 +10,18 @@ data Chofer = Chofer {
     ,kilometraje :: Number
     ,viajes :: [Viaje]
     ,condicion :: Condicion
-}
+} deriving (Show)
 
 data Viaje = Viaje {
     fecha :: (Number, Number, Number)
     ,cliente :: Cliente
     ,costo :: Number
-}
+}deriving (Show)
 
 data Cliente = Cliente {
     nombreCliente :: String
     ,dondeVive :: String
-}
+} deriving (Show)
 
 --Punto 2 CONDICIONES
 
@@ -41,14 +41,20 @@ type Zona = String
 viajeSegunDondeViveCliente :: Zona -> Condicion
 viajeSegunDondeViveCliente zona = not . (== zona) . dondeVive . cliente
 
---Punto 3a)
+--Punto 3a) --ACORDARSE DE DEFINIR DATAS DE EJEMPLO CON EL TIPO
+lucas :: Cliente
 lucas = Cliente "Lucas" "Victoria"
-viajeLucas = [(Viaje (20,04,2017) lucas 150)]
+
+viajeLucas :: Viaje
+viajeLucas = (Viaje (20,04,2017) lucas 150)
 
 --Punto 3b)
-daniel = Chofer "Daniel" 23500 viajeLucas (viajeSegunDondeViveCliente "Olivos")
+daniel :: Chofer
+daniel = Chofer "Daniel" 23500 [viajeLucas] (viajeSegunDondeViveCliente "Olivos")
 
 --Punto 3c)
+
+alejandra :: Chofer
 alejandra = Chofer "Alejandra" 180000 [] cualquierViaje
 
 --Punto 4
@@ -64,9 +70,36 @@ listaCostos :: [Viaje] -> [Number]
 listaCostos viajes = map costo viajes
 
 --Punto 6a
-{-
-(4 puntos) Realizar un viaje: dado un viaje y una lista de choferes, se pide que
-filtre los choferes que toman ese viaje. Si ningún chofer está interesado, no se preocupen: 
-el viaje no se puede realizar.
--}
+--Ejemplo lista de choferes y explico a Juana para probar
+listaChoferes :: [Chofer]
+listaChoferes = [daniel, juana] 
+
+juana :: Chofer 
+juana = Chofer "Juana" 12222 [viajeLucas, viajeDani] cualquierViaje
+
+viajeDani :: Viaje
+viajeDani = Viaje (20,04,2017) daniela 130
+
+daniela :: Cliente
+daniela = Cliente "Daniela" "Palermo"
+--
+
+realizarViaje :: Viaje -> [Chofer] -> [Chofer]
+realizarViaje viaje = filter (flip puedeTomarViaje viaje)
+
+--Punto 6b
+quienTieneMenosViajesTiene :: [Chofer] -> Chofer
+quienTieneMenosViajesTiene choferes = foldl1 menosViajes choferes
+
+menosViajes :: Chofer -> Chofer -> Chofer
+menosViajes chofer1 chofer2 | chofer2TieneMenosViajes chofer2 chofer1 = chofer2
+                            | otherwise = chofer1
+
+chofer2TieneMenosViajes :: Chofer -> Chofer -> Bool
+chofer2TieneMenosViajes chofer2 = ( > length (viajes chofer2)) . length . viajes 
+
+--Punto 6c
+--efectuar el viaje: esto debe incorporar el viaje a la lista de viajes del chofer. 
+-- ¿Cómo logra representar este cambio de estado?
+
 
